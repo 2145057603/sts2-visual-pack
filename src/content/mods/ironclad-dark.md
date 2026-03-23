@@ -2,7 +2,7 @@
 title: "铁甲战士暗黑骑士皮肤"
 category: "mod-skin"
 tags: ["铁甲战士", "暗黑风格", "高清重绘"]
-cover: "/covers/mods/mod-skin/ironclad-dark.webp"
+cover: "https://img.51shazhu.com/autoupload/8YwfLp-qgfmAEThMNWa3M9iO_OyvX7mIgxFBfDMDErs/20250808/SUt8/3456X1944/2025.8.8.03.png/webp"
 images:
   - "/covers/mods/mod-skin/ironclad-dark-1.webp"
   - "/covers/mods/mod-skin/ironclad-dark-2.webp"
