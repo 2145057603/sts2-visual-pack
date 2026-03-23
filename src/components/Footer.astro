@@ -1,0 +1,52 @@
+---
+import { CATEGORIES } from '../data/categories';
+---
+
+<footer class="bg-surface-800 border-t border-surface-600 mt-16">
+  <div class="container-main py-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- 站点信息 -->
+      <div>
+        <div class="flex items-center gap-2 mb-4">
+          <span class="text-xl">⚔️</span>
+          <span class="font-bold text-accent-400">杀戮尖塔2 Mod 站</span>
+        </div>
+        <p class="text-gray-400 text-sm leading-relaxed">
+          精选 Mod 资源展示站，提供角色皮肤、卡牌美化、遗物替换等优质 Mod 的介绍与下载引导。
+        </p>
+      </div>
+
+      <!-- 分类导航 -->
+      <div>
+        <h3 class="font-semibold text-gray-200 mb-4">资源分类</h3>
+        <ul class="space-y-2">
+          {CATEGORIES.map((cat) => (
+            <li>
+              <a
+                href={`/category/${cat.id}/`}
+                class="text-gray-400 hover:text-primary-400 text-sm transition-colors"
+              >
+                {cat.name}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- 说明 -->
+      <div>
+        <h3 class="font-semibold text-gray-200 mb-4">关于本站</h3>
+        <ul class="space-y-2 text-sm text-gray-400">
+          <li>本站仅提供资源展示与下载引导</li>
+          <li>文件由 OpenList + 移动云盘存储</li>
+          <li>点击下载将跳转至对应存储页面</li>
+          <li class="pt-2 text-gray-500">所有 Mod 版权归原作者所有</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="border-t border-surface-600 mt-8 pt-6 text-center text-gray-500 text-sm">
+      <p>© {new Date().getFullYear()} 杀戮尖塔2 Mod 资源站 · 仅供学习交流</p>
+    </div>
+  </div>
+</footer>

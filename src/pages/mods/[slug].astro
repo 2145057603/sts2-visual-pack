@@ -1,0 +1,164 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+import DownloadButton from '../../components/DownloadButton.astro';
+import { CATEGORY_LABELS } from '../../data/categories';
+import '../../styles/global.css';
+
+export async function getStaticPaths() {
+  const mods = await getCollection('mods');
+  return mods.map((mod) => ({
+    params: { slug: mod.slug },
+    props: { mod },
+  }));
+}
+
+const { mod } = Astro.props;
+const { Content } = await render(mod);
+const {
+  title, cover, images, description, category, tags,
+  author, version, publishedAt, updatedAt, downloadUrl,
+} = mod.data;
+
+const categoryName = CATEGORY_LABELS[category] ?? category;
+const date = updatedAt ?? publishedAt;
+---
+
+<BaseLayout title={title} description={description} ogImage={cover}>
+  <Navbar slot="navbar" />
+
+  <article class="py-10">
+    <div class="container-main">
+      <!-- 面包屑 -->
+      <nav class="text-sm text-gray-500 mb-6">
+        <a href="/" class="hover:text-gray-300 transition-colors">首页</a>
+        <span class="mx-2">/</span>
+        <a href={`/category/${category}/`} class="hover:text-gray-300 transition-colors">{categoryName}</a>
+        <span class="mx-2">/</span>
+        <span class="text-gray-300">{title}</span>
+      </nav>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        <!-- 左侧：封面 + 下载信息 -->
+        <div class="lg:col-span-1">
+          <!-- 封面 -->
+          <div class="rounded-card overflow-hidden aspect-video bg-surface-700 mb-6 shadow-card">
+            {cover ? (
+              <img src={cover} alt={title} class="w-full h-full object-cover" />
+            ) : (
+              <div class="w-full h-full flex items-center justify-center text-6xl text-surface-500">🗡️</div>
+            )}
+          </div>
+
+          <!-- 下载按钮 -->
+          <div class="mb-6">
+            <DownloadButton href={downloadUrl} label="前往下载" />
+            <p class="text-xs text-gray-500 mt-2">点击后将跳转到 OpenList 下载页面</p>
+          </div>
+
+          <!-- 资源信息卡 -->
+          <div class="bg-surface-800 border border-surface-600 rounded-card p-5 space-y-3">
+            <h3 class="font-semibold text-gray-300 text-sm uppercase tracking-wide">资源信息</h3>
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between">
+                <span class="text-gray-500">分类</span>
+                <span class="badge">{categoryName}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-500">作者</span>
+                <span class="text-gray-300">{author}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-500">版本</span>
+                <span class="text-gray-300 font-mono">{version}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-500">发布时间</span>
+                <span class="text-gray-300">
+                  {publishedAt.toLocaleDateString('zh-CN')}
+                </span>
+              </div>
+              {updatedAt && (
+                <div class="flex justify-between">
+                  <span class="text-gray-500">更新时间</span>
+                  <span class="text-gray-300">
+                    {updatedAt.toLocaleDateString('zh-CN')}
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <!-- 标签 -->
+          {tags.length > 0 && (
+            <div class="mt-5">
+              <h3 class="font-semibold text-gray-300 text-sm uppercase tracking-wide mb-3">标签</h3>
+              <div class="flex flex-wrap gap-2">
+                {tags.map((tag) => (
+                  <span class="text-xs text-gray-400 bg-surface-700 border border-surface-500 px-2.5 py-1 rounded-full">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        <!-- 右侧：标题 + 简介 + 预览图 + 安装说明 -->
+        <div class="lg:col-span-2">
+          <h1 class="text-3xl font-bold text-white mb-3 leading-tight">{title}</h1>
+
+          <p class="text-gray-400 text-base leading-relaxed mb-6 border-l-4 border-primary-500/50 pl-4 bg-surface-800/50 py-3 pr-4 rounded-r-lg">
+            {description}
+          </p>
+
+          <!-- 预览图画廊 -->
+          {images.length > 0 && (
+            <div class="mb-8">
+              <h2 class="text-lg font-semibold text-gray-200 mb-4">预览图</h2>
+              <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {images.map((img, i) => (
+                  <div class="rounded-lg overflow-hidden aspect-video bg-surface-700 shadow-card">
+                    <img
+                      src={img}
+                      alt={`${title} 预览图 ${i + 1}`}
+                      class="w-full h-full object-cover hover:scale-105 transition-transform duration-200"
+                      loading="lazy"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <!-- 安装说明（Markdown 正文） -->
+          <div class="bg-surface-800 border border-surface-600 rounded-card p-6">
+            <h2 class="text-lg font-semibold text-gray-200 mb-4">安装说明</h2>
+            <div class="prose prose-invert prose-sm max-w-none
+                        prose-headings:text-gray-200
+                        prose-p:text-gray-400
+                        prose-li:text-gray-400
+                        prose-a:text-primary-400
+                        prose-strong:text-gray-200
+                        prose-code:text-accent-400 prose-code:bg-surface-700 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
+                        prose-pre:bg-surface-700 prose-pre:border prose-pre:border-surface-600">
+              <Content />
+            </div>
+          </div>
+
+          <!-- 底部下载按钮 -->
+          <div class="mt-8 flex items-center gap-4">
+            <DownloadButton href={downloadUrl} label="前往下载" />
+            <a href={`/category/${category}/`} class="btn-secondary">
+              ← 返回 {categoryName}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <Footer slot="footer" />
+</BaseLayout>

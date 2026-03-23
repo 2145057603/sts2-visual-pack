@@ -1,0 +1,88 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import ModCard from '../components/ModCard.astro';
+import ModCardFeatured from '../components/ModCardFeatured.astro';
+import CategoryCard from '../components/CategoryCard.astro';
+import { CATEGORIES } from '../data/categories';
+import '../styles/global.css';
+
+const allMods = await getCollection('mods');
+const sortedMods = allMods.sort(
+  (a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf()
+);
+
+const featuredMods = sortedMods.filter((m) => m.data.featured).slice(0, 3);
+const latestMods = sortedMods.slice(0, 12);
+---
+
+<BaseLayout title="首页" description="杀戮尖塔2 Mod 资源站 — 精选皮肤、卡牌、遗物美化包下载">
+  <Navbar slot="navbar" />
+
+  <!-- Hero 区域 -->
+  <section class="relative overflow-hidden bg-gradient-to-b from-surface-800 to-surface-900 border-b border-surface-600">
+    <div class="absolute inset-0 bg-gradient-to-r from-primary-600/10 via-transparent to-accent-600/10 pointer-events-none"></div>
+    <div class="container-main py-16 md:py-24 text-center relative">
+      <div class="inline-flex items-center gap-2 bg-primary-500/10 border border-primary-500/30 text-primary-400 text-sm px-4 py-1.5 rounded-full mb-6">
+        <span>⚔️</span>
+        <span>杀戮尖塔2 Mod 资源站</span>
+      </div>
+      <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight">
+        精选 <span class="text-accent-400">Mod 资源</span><br />
+        <span class="text-gray-300 text-3xl md:text-4xl">皮肤 · 卡牌 · 遗物 · 玩法</span>
+      </h1>
+      <p class="text-gray-400 text-lg max-w-xl mx-auto mb-8">
+        浏览、下载精心整理的杀戮尖塔2 Mod 资源，让你的旅程更精彩
+      </p>
+      <div class="flex items-center justify-center gap-4 flex-wrap">
+        <a href="#categories" class="btn-download">浏览分类</a>
+        <a href="#latest" class="btn-secondary">最新资源</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 分类导航 -->
+  <section id="categories" class="py-12">
+    <div class="container-main">
+      <h2 class="section-title">资源分类</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
+        {CATEGORIES.map((cat) => <CategoryCard category={cat} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- 推荐资源 -->
+  {featuredMods.length > 0 && (
+    <section class="py-12 bg-surface-800/30">
+      <div class="container-main">
+        <h2 class="section-title">精选推荐</h2>
+        <div class="flex flex-col gap-6">
+          {featuredMods.map((mod) => <ModCardFeatured mod={mod} />)}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- 最新资源 -->
+  <section id="latest" class="py-12">
+    <div class="container-main">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="section-title mb-0">最新资源</h2>
+      </div>
+      {latestMods.length === 0 ? (
+        <div class="text-center py-16 text-gray-500">
+          <p class="text-5xl mb-4">📦</p>
+          <p>暂无资源，敬请期待</p>
+        </div>
+      ) : (
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {latestMods.map((mod) => <ModCard mod={mod} />)}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</BaseLayout>

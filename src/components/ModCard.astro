@@ -1,0 +1,59 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { CATEGORY_LABELS } from '../data/categories';
+
+interface Props {
+  mod: CollectionEntry<'mods'>;
+}
+
+const { mod } = Astro.props;
+const { title, cover, description, category, tags, updatedAt, publishedAt } = mod.data;
+const date = updatedAt ?? publishedAt;
+const categoryName = CATEGORY_LABELS[category] ?? category;
+---
+
+<a href={`/mods/${mod.slug}/`} class="mod-card group block">
+  <!-- 封面图 -->
+  <div class="aspect-video overflow-hidden bg-surface-700">
+    {cover ? (
+      <img
+        src={cover}
+        alt={title}
+        class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+        loading="lazy"
+      />
+    ) : (
+      <div class="w-full h-full flex items-center justify-center text-4xl text-surface-500">
+        🗡️
+      </div>
+    )}
+  </div>
+
+  <!-- 内容 -->
+  <div class="p-4">
+    <div class="flex items-start justify-between gap-2 mb-2">
+      <h3 class="font-semibold text-gray-100 text-base leading-snug group-hover:text-primary-400 transition-colors line-clamp-2">
+        {title}
+      </h3>
+      <span class="badge shrink-0">{categoryName}</span>
+    </div>
+
+    <p class="text-gray-400 text-sm leading-relaxed line-clamp-2 mb-3">
+      {description}
+    </p>
+
+    {tags.length > 0 && (
+      <div class="flex flex-wrap gap-1 mb-3">
+        {tags.slice(0, 3).map((tag) => (
+          <span class="text-xs text-gray-500 bg-surface-700 px-2 py-0.5 rounded">
+            {tag}
+          </span>
+        ))}
+      </div>
+    )}
+
+    <div class="text-xs text-gray-500">
+      更新于 {date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
+    </div>
+  </div>
+</a>

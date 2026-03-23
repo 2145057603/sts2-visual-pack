@@ -1,0 +1,9 @@
+# Cloudflare Pages 缓存策略
+
+# 静态资源长缓存（1年）
+/covers/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# HTML 不缓存，确保内容更新即时生效
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate

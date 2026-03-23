@@ -1,0 +1,64 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+import ModCard from '../../components/ModCard.astro';
+import { CATEGORIES } from '../../data/categories';
+import '../../styles/global.css';
+
+export async function getStaticPaths() {
+  return CATEGORIES.map((cat) => ({
+    params: { slug: cat.id },
+    props: { category: cat },
+  }));
+}
+
+const { category } = Astro.props;
+
+const allMods = await getCollection('mods', ({ data }) => data.category === category.id);
+const mods = allMods.sort(
+  (a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf()
+);
+---
+
+<BaseLayout
+  title={category.name}
+  description={`${category.name} — ${category.description}`}
+>
+  <Navbar slot="navbar" />
+
+  <!-- 页头 -->
+  <section class="bg-surface-800 border-b border-surface-600 py-10">
+    <div class="container-main">
+      <!-- 面包屑 -->
+      <nav class="text-sm text-gray-500 mb-4">
+        <a href="/" class="hover:text-gray-300 transition-colors">首页</a>
+        <span class="mx-2">/</span>
+        <span class="text-gray-300">{category.name}</span>
+      </nav>
+      <h1 class="text-3xl font-bold text-white mb-2">{category.name}</h1>
+      <p class="text-gray-400">{category.description}</p>
+      <div class="mt-3 text-sm text-primary-400">共 {mods.length} 个资源</div>
+    </div>
+  </section>
+
+  <!-- 资源列表 -->
+  <section class="py-10">
+    <div class="container-main">
+      {mods.length === 0 ? (
+        <div class="text-center py-20 text-gray-500">
+          <p class="text-5xl mb-4">📦</p>
+          <p class="text-lg">该分类暂无资源</p>
+          <a href="/" class="mt-4 inline-block btn-secondary text-sm">返回首页</a>
+        </div>
+      ) : (
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {mods.map((mod) => <ModCard mod={mod} />)}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</BaseLayout>
