@@ -3,9 +3,33 @@
 @tailwind utilities;
 
 @layer base {
-  body {
-    @apply bg-surface-900 text-gray-100 font-sans antialiased;
+  /* ── 亮色主题（默认） ── */
+  :root {
+    --surface-900: 240 244 255;   /* #f0f4ff 页面背景 */
+    --surface-800: 255 255 255;   /* #ffffff 卡片背景 */
+    --surface-700: 238 241 248;   /* #eef1f8 悬浮/激活 */
+    --surface-600: 221 227 240;   /* #dde3f0 边框 */
+    --surface-500: 204 212 232;   /* #ccd4e8 强边框 */
   }
+
+  /* ── 暗色主题 ── */
+  .dark {
+    --surface-900: 13 15 26;      /* #0d0f1a */
+    --surface-800: 20 23 38;      /* #141726 */
+    --surface-700: 28 32 53;      /* #1c2035 */
+    --surface-600: 37 40 64;      /* #252840 */
+    --surface-500: 46 50 82;      /* #2e3252 */
+  }
+
+  body {
+    @apply bg-surface-900 font-sans antialiased;
+  }
+
+  /* 暗色模式：浅色文字 */
+  html.dark body { color: #f1f5f9; }
+
+  /* 亮色模式：深色文字 */
+  html:not(.dark) body { color: #1e293b; }
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-bold tracking-tight;
@@ -15,10 +39,28 @@
     @apply leading-relaxed;
   }
 
-  /* 中文标点挤压 */
   :lang(zh) {
     font-feature-settings: 'kern' 1;
   }
+}
+
+/* ── 亮色模式：gray-* 文字颜色映射为深色 ── */
+html:not(.dark) .text-white        { color: #0f172a !important; }
+html:not(.dark) .text-gray-100     { color: #0f172a; }
+html:not(.dark) .text-gray-200     { color: #1e293b; }
+html:not(.dark) .text-gray-300     { color: #334155; }
+html:not(.dark) .text-gray-400     { color: #475569; }
+html:not(.dark) .text-gray-500     { color: #64748b; }
+
+/* 亮色模式：navbar hover 文字 */
+html:not(.dark) .hover\:text-white:hover { color: #0f172a; }
+
+/* 亮色模式：卡片阴影更浅 */
+html:not(.dark) .shadow-card {
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,0.08), 0 1px 3px 0 rgba(0,0,0,0.05);
+}
+html:not(.dark) .hover\:shadow-card-hover:hover {
+  box-shadow: 0 6px 24px 0 rgba(99,102,241,0.15), 0 2px 8px 0 rgba(0,0,0,0.06);
 }
 
 @layer components {
@@ -43,7 +85,6 @@
   .btn-secondary {
     @apply inline-flex items-center gap-2
            bg-surface-700 hover:bg-surface-600
-           text-gray-200
            px-4 py-2 rounded-lg
            border border-surface-500
            transition-colors duration-150;
@@ -64,7 +105,7 @@
   }
 
   .section-title {
-    @apply text-2xl font-bold text-gray-100 mb-6
+    @apply text-2xl font-bold mb-6
            flex items-center gap-3;
   }
 

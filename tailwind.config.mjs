@@ -5,12 +5,13 @@ export default {
   theme: {
     extend: {
       colors: {
+        // 使用 RGB 元组格式，支持 Tailwind 透明度修饰符（如 bg-surface-900/90）
         surface: {
-          900: '#0d0f1a',
-          800: '#141726',
-          700: '#1c2035',
-          600: '#252840',
-          500: '#2e3252',
+          900: 'rgb(var(--surface-900) / <alpha-value>)',
+          800: 'rgb(var(--surface-800) / <alpha-value>)',
+          700: 'rgb(var(--surface-700) / <alpha-value>)',
+          600: 'rgb(var(--surface-600) / <alpha-value>)',
+          500: 'rgb(var(--surface-500) / <alpha-value>)',
         },
         primary: {
           400: '#818cf8',

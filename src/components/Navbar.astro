@@ -32,22 +32,60 @@ const currentPath = Astro.url.pathname;
             {cat.name}
           </a>
         ))}
+
+        <!-- 主题切换按钮（桌面） -->
+        <button
+          id="theme-toggle"
+          class="ml-2 p-2 rounded-lg text-gray-400 hover:text-white hover:bg-surface-700 transition-colors"
+          aria-label="切换主题"
+          title="切换亮色/暗色"
+        >
+          <!-- 太阳：暗色模式显示，点击切亮色 -->
+          <svg id="icon-sun" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+          </svg>
+          <!-- 月亮：亮色模式显示，点击切暗色 -->
+          <svg id="icon-moon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+        </button>
       </div>
 
-      <!-- 移动端汉堡菜单 -->
-      <button
-        id="mobile-menu-btn"
-        class="md:hidden p-2 rounded-lg text-gray-400 hover:text-white hover:bg-surface-700 transition-colors"
-        aria-label="打开菜单"
-      >
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
+      <!-- 移动端右侧按钮组 -->
+      <div class="flex md:hidden items-center gap-1">
+        <!-- 移动端主题切换 -->
+        <button
+          id="theme-toggle-mobile"
+          class="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-surface-700 transition-colors"
+          aria-label="切换主题"
+        >
+          <svg id="icon-sun-mobile" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+          </svg>
+          <svg id="icon-moon-mobile" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+        </button>
+
+        <!-- 汉堡菜单 -->
+        <button
+          id="mobile-menu-btn"
+          class="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-surface-700 transition-colors"
+          aria-label="打开菜单"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
     </nav>
 
     <!-- 移动端菜单面板 -->
-    <div id="mobile-menu" class="hidden md:hidden pb-4 border-t border-surface-700 pt-3">
+    <div id="mobile-menu" class="hidden md:hidden pb-4 border-t border-surface-600 pt-3">
       <div class="flex flex-col gap-1">
         <a href="/" class="px-4 py-2.5 text-sm font-medium text-gray-300 hover:text-white hover:bg-surface-700 rounded-lg transition-colors">首页</a>
         {CATEGORIES.map((cat) => (
@@ -64,9 +102,30 @@ const currentPath = Astro.url.pathname;
 </header>
 
 <script>
-  const btn = document.getElementById('mobile-menu-btn');
-  const menu = document.getElementById('mobile-menu');
-  btn?.addEventListener('click', () => {
-    menu?.classList.toggle('hidden');
+  function syncIcons() {
+    const isDark = document.documentElement.classList.contains('dark');
+    // 桌面
+    document.getElementById('icon-sun')?.classList.toggle('hidden', !isDark);
+    document.getElementById('icon-moon')?.classList.toggle('hidden', isDark);
+    // 移动端
+    document.getElementById('icon-sun-mobile')?.classList.toggle('hidden', !isDark);
+    document.getElementById('icon-moon-mobile')?.classList.toggle('hidden', isDark);
+  }
+
+  function toggleTheme() {
+    const isDark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    syncIcons();
+  }
+
+  // 初始化图标状态
+  syncIcons();
+
+  document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
+  document.getElementById('theme-toggle-mobile')?.addEventListener('click', toggleTheme);
+
+  // 汉堡菜单
+  document.getElementById('mobile-menu-btn')?.addEventListener('click', () => {
+    document.getElementById('mobile-menu')?.classList.toggle('hidden');
   });
 </script>

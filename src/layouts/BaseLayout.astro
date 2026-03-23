@@ -15,7 +15,7 @@ const siteTitle = title === '首页' ? '杀戮尖塔2 Mod 资源站' : `${title}
 ---
 
 <!doctype html>
-<html lang="zh-CN" class="dark">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -24,6 +24,15 @@ const siteTitle = title === '首页' ? '杀戮尖塔2 Mod 资源站' : `${title}
     <meta property="og:description" content={description} />
     {ogImage && <meta property="og:image" content={ogImage} />}
     <title>{siteTitle}</title>
+    <!-- 防止主题闪烁：在渲染前读取本地存储 -->
+    <script is:inline>
+      (function () {
+        var stored = localStorage.getItem('theme');
+        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var isDark = stored ? stored === 'dark' : prefersDark;
+        if (isDark) document.documentElement.classList.add('dark');
+      })();
+    </script>
     <!-- Noto Sans SC 中文字体 -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
