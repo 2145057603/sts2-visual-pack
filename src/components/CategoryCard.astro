@@ -27,7 +27,7 @@ const allMods = await getCollection('mods', ({ data }) => data.category === cate
     />
   ) : (
     <div class="w-16 h-16 rounded-lg bg-primary-500/20 flex items-center justify-center mb-3 text-3xl group-hover:scale-110 transition-transform">
-      🗡️
+      {category.icon}
     </div>
   )}
 
