@@ -54,8 +54,7 @@ const date = updatedAt ?? publishedAt;
 
           <!-- 下载按钮 -->
           <div class="mb-6">
-            <DownloadButton href={downloadUrl} label="前往下载" />
-            <p class="text-xs text-gray-500 mt-2">点击后将跳转到 OpenList 下载页面</p>
+            <DownloadButton href={downloadUrl} label="开始下载" />
           </div>
 
           <!-- 资源信息卡 -->
@@ -148,9 +147,8 @@ const date = updatedAt ?? publishedAt;
             </div>
           </div>
 
-          <!-- 底部下载按钮 -->
-          <div class="mt-8 flex items-center gap-4">
-            <DownloadButton href={downloadUrl} label="前往下载" />
+          <!-- 底部操作栏 -->
+          <div class="mt-8">
             <a href={`/category/${category}/`} class="btn-secondary">
               ← 返回 {categoryName}
             </a>

@@ -4,13 +4,12 @@ interface Props {
   label?: string;
 }
 
-const { href, label = '前往下载' } = Astro.props;
+const { href, label = '开始下载' } = Astro.props;
 ---
 
 <a
   href={href}
-  target="_blank"
-  rel="noopener noreferrer"
+  download
   class="btn-download"
 >
   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
