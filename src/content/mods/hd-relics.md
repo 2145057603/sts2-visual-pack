@@ -3,7 +3,7 @@ title: "遗物图标高清重制包"
 category: "relic-skin"
 tags: ["遗物", "高清", "图标重制"]
 cover: "/covers/mods/relic-skin/hd-relics.webp"
-images: [https://u.fukit.cn/6FbgxXD9q]
+images: [https://pic5.fukit.cn/autoupload/8YwfLp-qgfmAEThMNWa3M9iO_OyvX7mIgxFBfDMDErs/20251112/rDpm/5120X2880/wallhaven-yqxzqx_5120x2880.png/webp]
 description: "将游戏内所有遗物图标替换为高清重制版本，清晰度提升 4 倍，让每件遗物都熠熠生辉。"
 author: "PixelForge"
 version: "1.0.0"
